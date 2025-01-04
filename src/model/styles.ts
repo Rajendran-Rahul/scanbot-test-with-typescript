@@ -3,6 +3,7 @@ import { CSSProperties } from "react";
 export class Styles {
   static colors: any = {
     scanbot: "#c8193c",
+    scanbot1:"blue"
   };
 
   static backButton: CSSProperties = {

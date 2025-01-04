@@ -25,7 +25,7 @@ export default class ImageResultsPage extends React.Component<any, any> {
 
   render() {
     return (
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: "100%", height: "100%"}}>
         <ImageList style={{ height: "100%", margin: 0 }} cols={3}>
           {this.state.images.map((image: any) => {
             return (
