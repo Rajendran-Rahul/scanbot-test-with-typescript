@@ -15,7 +15,7 @@ export default class DocumentScannerPage extends React.Component<any, any> {
 
   render() {
     return (
-      <div style={{ height: "100%", border:"2px solid red" }}>
+      <div style={{ height: "100%"}}>
         <div
           id={ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER}
           style={{ width: "100%", height: "100%" }}

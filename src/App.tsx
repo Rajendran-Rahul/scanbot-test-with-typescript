@@ -1,5 +1,5 @@
 import React from "react";
-import AppBar from '@mui/material/AppBar';
+import AppBar from "@mui/material/AppBar";
 import Swal from "sweetalert2";
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
@@ -39,14 +39,16 @@ export default class App extends React.Component<any, any> {
       this.forceUpdate();
     });
 
-    await ScanbotSdkService.instance.setLicenseFailureHandler((error: {message:string}) => {
-      RoutingService.instance.reset();
+    await ScanbotSdkService.instance.setLicenseFailureHandler(
+      (error: { message: string }) => {
+        RoutingService.instance.reset();
 
-      this.setState({ error: { message: error } });
-      if (this._documentScanner?.isVisible()) {
-        this._documentScanner?.pop();
+        this.setState({ error: { message: error } });
+        if (this._documentScanner?.isVisible()) {
+          this._documentScanner?.pop();
+        }
       }
-    });
+    );
   }
 
   onBackPress() {
@@ -125,13 +127,12 @@ export default class App extends React.Component<any, any> {
 
     if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner) {
       return (
-        <div style={{width:"100%"}}>
+        <div style={{ width: "100%" }}>
           <ErrorLabel message={this.state.error.message} />
           <FeatureList onItemClick={this.onFeatureClick.bind(this)} />
         </div>
       );
     }
-
     if (route === RoutePath.CroppingView) {
       if (!Pages.instance.hasActiveItem()) {
         RoutingService.instance.reset();
@@ -139,7 +140,6 @@ export default class App extends React.Component<any, any> {
       }
       return <CroppingPage sdk={this.state.sdk} />;
     }
-
     if (route === RoutePath.ImageDetails) {
       if (!Pages.instance.hasActiveItem()) {
         RoutingService.instance.reset();
@@ -224,6 +224,7 @@ export default class App extends React.Component<any, any> {
     );
     ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
   }
+
   async saveTIFF() {
     const bytes = await ScanbotSdkService.instance.generateTIFF(
       Pages.instance.get()
@@ -299,11 +300,7 @@ export default class App extends React.Component<any, any> {
       return;
     }
 
-    if (feature.id === RoutePath.LicenseInfo) {
-      const info = await this.state.sdk?.getLicenseInfo();
-      const color = info?.status === "Trial" ? "success" : "error";
-      this.setState({ alert: { color: color, text: JSON.stringify(info) } });
-    } else if (feature.id === RoutePath.DocumentOnJpeg) {
+    if (feature.id === RoutePath.DocumentOnJpeg) {
       const image = await ImageUtils.pick(
         ImageUtils.MIME_TYPE_JPEG,
         document.getElementById(feature.id) as any

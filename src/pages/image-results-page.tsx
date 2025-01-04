@@ -19,14 +19,14 @@ export default class ImageResultsPage extends React.Component<any, any> {
     for (let i = 0; i < pages.length; i++) {
       images.push({ index: i, base64: await this.imageFromPage(pages[i]) });
     }
-
+    
     this.setState({ images: images });
   }
 
   render() {
     return (
       <div style={{ width: "100%", height: "100%"}}>
-        <ImageList style={{ height: "100%", margin: 0 }} cols={3}>
+        <ImageList style={{ height: "100%", margin: 10 }} cols={3}>
           {this.state.images.map((image: any) => {
             return (
               <ImageListItem

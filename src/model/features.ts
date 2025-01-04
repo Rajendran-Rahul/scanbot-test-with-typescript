@@ -13,6 +13,5 @@ export class Features {
       name: "Image Results",
       route: RoutePath.ImageResults,
     },
-    { id: RoutePath.LicenseInfo, name: "License Info" },
   ];
 }

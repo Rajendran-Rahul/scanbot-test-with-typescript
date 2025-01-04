@@ -14,7 +14,7 @@ export class BottomBar extends React.Component<any, any> {
           display: "flex",
           alignItems:"center",
           color:"black",
-          width:"100vw"
+          width:"100%"
         }}
       >
         {this.props.buttons && this.createButtons()}

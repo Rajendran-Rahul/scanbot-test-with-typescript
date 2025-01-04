@@ -4,7 +4,6 @@ import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 import Pages from "../model/pages";
 import { MiscUtils } from "../utils/misc-utils";
-import { RoutePath, RoutingService } from "@/service/routing-service";
 
 export default class DocumentScannerComponent extends BaseScannerComponent {
   render() {
@@ -27,9 +26,7 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     
     if (label) {
       label.innerHTML = this.labelText();
-    }
-    if(result) RoutingService.instance.route(RoutePath.ImageResults)
-    
+    }    
   }
 
   onDocumentScannerError(e: Error) {
