@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowBack, CameraFront, SwitchCamera } from "@material-ui/icons";
+import { ArrowBack, CameraFront, SwitchCamera } from "@mui/icons-material";
 import { Constants } from "../model/constants";
 
 export default class ActionBarTop extends React.Component<any, any> {
