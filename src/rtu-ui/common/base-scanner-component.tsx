@@ -37,9 +37,9 @@ export default class BaseScannerComponent extends React.Component<any, any> {
 
   previousDestination?: string;
 
-  protected async onCameraSwap(scanner: IScannerCommon) {
+  protected async onCameraSwap(scanner: IScannerCommon, value?:boolean) {
     await MiscUtils.alert(`Swapping front/rear camera`);
-    scanner?.swapCameraFacing(true);
+    scanner?.swapCameraFacing(value);
   }
 
   protected async onCameraSwitch(scanner: IScannerCommon) {
@@ -98,7 +98,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
   isVisible() {
     return this._isVisible;
   }
-  push() {
+  push(_type: AnimationType) {
     this._isVisible = true;
   }
 

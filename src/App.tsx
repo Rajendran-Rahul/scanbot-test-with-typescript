@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar } from "@material-ui/core";
+import AppBar from '@mui/material/AppBar';
 import Swal from "sweetalert2";
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
@@ -39,7 +39,7 @@ export default class App extends React.Component<any, any> {
       this.forceUpdate();
     });
 
-    await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
+    await ScanbotSdkService.instance.setLicenseFailureHandler((error: {message:string}) => {
       RoutingService.instance.reset();
 
       this.setState({ error: { message: error } });

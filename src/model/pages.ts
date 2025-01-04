@@ -4,6 +4,7 @@ export default class Pages {
   private list: any[] = [];
   private activeIndex: number = -1;
 
+  // @ts-ignore
   public add(page: any) {
     this.list.push(page);
   }

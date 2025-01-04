@@ -1,6 +1,7 @@
 import React from "react";
 import Pages from "../model/pages";
-import { GridList, GridListTile } from "@material-ui/core";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import { Styles } from "../model/styles";
 
 export default class ImageResultsPage extends React.Component<any, any> {
@@ -25,14 +26,10 @@ export default class ImageResultsPage extends React.Component<any, any> {
   render() {
     return (
       <div style={{ width: "100%", height: "100%" }}>
-        <GridList
-          style={{ height: "100%", margin: 0 }}
-          cellHeight={160}
-          cols={3}
-        >
+        <ImageList style={{ height: "100%", margin: 0 }} cols={3}>
           {this.state.images.map((image: any) => {
             return (
-              <GridListTile
+              <ImageListItem
                 key={image.index}
                 cols={1}
                 onClick={() => {
@@ -44,10 +41,10 @@ export default class ImageResultsPage extends React.Component<any, any> {
                   src={image.base64}
                   alt={"."}
                 />
-              </GridListTile>
+              </ImageListItem>
             );
           })}
-        </GridList>
+        </ImageList>
       </div>
     );
   }

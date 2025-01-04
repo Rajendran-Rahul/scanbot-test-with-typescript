@@ -1,6 +1,6 @@
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 
-// @ts-ignore
+// @ts-expect-ignore
 import { pdfjs } from "react-pdf";
 
 // const resizeImg = require('resize-image-buffer');
