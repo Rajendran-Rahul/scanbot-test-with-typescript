@@ -6,6 +6,7 @@ export default class Pages {
 
   // @ts-ignore
   public add(page: any) {
+    console.log("add image", page)
     this.list.push(page);
   }
 

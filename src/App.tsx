@@ -39,16 +39,14 @@ export default class App extends React.Component<any, any> {
       this.forceUpdate();
     });
 
-    await ScanbotSdkService.instance.setLicenseFailureHandler(
-      (error: { message: string }) => {
-        RoutingService.instance.reset();
+    await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
+      RoutingService.instance.reset();
 
-        this.setState({ error: { message: error } });
-        if (this._documentScanner?.isVisible()) {
-          this._documentScanner?.pop();
-        }
+      this.setState({ error: { message: error } });
+      if (this._documentScanner?.isVisible()) {
+        this._documentScanner?.pop();
       }
-    );
+    });
   }
 
   onBackPress() {
@@ -94,6 +92,8 @@ export default class App extends React.Component<any, any> {
           style={{
             height: this.containerHeight(),
             marginTop: this.toolbarHeight(),
+            position: "relative",
+            width: "99vw",
           }}
         >
           {this.decideContent()}
@@ -116,6 +116,7 @@ export default class App extends React.Component<any, any> {
           ref={(ref) => (this._documentScanner = ref)}
           sdk={this.state.sdk}
           onDocumentDetected={this.onDocumentDetected.bind(this)}
+          showBottomActionBar={true}
         />
       );
     }
@@ -184,10 +185,10 @@ export default class App extends React.Component<any, any> {
       return [
         { text: "CROP", action: this.openCroppingUI.bind(this) },
         { text: "FILTER", action: this.applyFilter.bind(this) },
-        { text: "DELETE", action: this.deletePage.bind(this), right: true },
+        { text: "DELETE", action: this.deletePage.bind(this) },
+        { text: "DONE", action: this.onBackPress.bind(this), right:true },
       ];
     }
-
     if (route === RoutePath.CroppingView) {
       return [
         { text: "DETECT", action: this.detect.bind(this) },
@@ -300,7 +301,11 @@ export default class App extends React.Component<any, any> {
       return;
     }
 
-    if (feature.id === RoutePath.DocumentOnJpeg) {
+    if (feature.id === RoutePath.LicenseInfo) {
+      const info = await this.state.sdk?.getLicenseInfo();
+      const color = info?.status === "Trial" ? "success" : "error";
+      this.setState({ alert: { color: color, text: JSON.stringify(info) } });
+    } else if (feature.id === RoutePath.DocumentOnJpeg) {
       const image = await ImageUtils.pick(
         ImageUtils.MIME_TYPE_JPEG,
         document.getElementById(feature.id) as any

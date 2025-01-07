@@ -19,8 +19,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
   }
 
   containerHeight() {
-    const defaultBarHeight = (this.props.showBottomActionBar ? 2 : 1) * Constants.ACTION_BAR_HEIGHT
-    const barHeight = defaultBarHeight ? defaultBarHeight : 0;
+    const barHeight =  (this.props.showBottomActionBar ? 2 : 1) * Constants.ACTION_BAR_HEIGHT ||  0;
     return window.innerHeight - barHeight;
   }
 

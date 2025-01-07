@@ -19,32 +19,38 @@ export default class ImageResultsPage extends React.Component<any, any> {
     for (let i = 0; i < pages.length; i++) {
       images.push({ index: i, base64: await this.imageFromPage(pages[i]) });
     }
-    
+
     this.setState({ images: images });
   }
 
   render() {
     return (
-      <div style={{ width: "100%", height: "100%"}}>
-        <ImageList style={{ height: "100%", margin: 10 }} cols={3}>
-          {this.state.images.map((image: any) => {
-            return (
-              <ImageListItem
-                key={image.index}
-                cols={1}
-                onClick={() => {
-                  this.props.onDetailButtonClick(image.index);
-                }}
-              >
-                <img
-                  style={Styles.documentImage}
-                  src={image.base64}
-                  alt={"."}
-                />
-              </ImageListItem>
-            );
-          })}
-        </ImageList>
+      <div style={{ width: "100%", height: "100%" }}>
+        {this.state.images.length === 0 ? (
+          <div style={{ height: "100%", margin: 100 }}>
+            No documents scanned.
+          </div>
+        ) : (
+          <ImageList style={{ height: "100%", margin: 10 }} cols={3}>
+            {this.state.images.map((image: any) => {
+              return (
+                <ImageListItem
+                  key={image.index}
+                  cols={1}
+                  onClick={() => {
+                    this.props.onDetailButtonClick(image.index);
+                  }}
+                >
+                  <img
+                    style={Styles.documentImage}
+                    src={image.base64}
+                    alt={"."}
+                  />
+                </ImageListItem>
+              );
+            })}
+          </ImageList>
+        )}
       </div>
     );
   }
