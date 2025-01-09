@@ -26,6 +26,7 @@ export class RoutingService {
         query += key + "=" + args[key];
       });
     }
+    console.log("path", "#/" + path + query)
 
     history.push("#/" + path + query);
   }

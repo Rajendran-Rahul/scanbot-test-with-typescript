@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Swal from "sweetalert2";
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
-import FeatureList from "./subviews/feature-list";
+// import FeatureList from "./subviews/feature-list";
 import { BottomBar } from "./subviews/bottom-bar";
 import ImageResultsPage from "./pages/image-results-page";
 import ImageDetailPage from "./pages/image-detail-page";
@@ -16,7 +16,7 @@ import { NavigationUtils } from "./utils/navigation-utils";
 import { MiscUtils } from "./utils/misc-utils";
 import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
 import { AnimationType } from "./rtu-ui/enum/animation-type";
-import ErrorLabel from "./subviews/error-label";
+// import ErrorLabel from "./subviews/error-label";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -28,6 +28,10 @@ export default class App extends React.Component<any, any> {
       error: {
         message: undefined,
       },
+      image: undefined,
+      frontSideImage: undefined,
+      backSideImage: undefined,
+      imageSide: undefined,
     };
   }
 
@@ -128,9 +132,46 @@ export default class App extends React.Component<any, any> {
 
     if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner) {
       return (
-        <div style={{ width: "100%" }}>
-          <ErrorLabel message={this.state.error.message} />
-          <FeatureList onItemClick={this.onFeatureClick.bind(this)} />
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center", gap:'40px' }}
+        >
+          {/* <ErrorLabel message={this.state.error.message} />
+          <FeatureList onItemClick={this.onFeatureClick.bind(this)} /> */}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "20px", }}
+          >
+            <button
+              onClick={() => {
+                this._documentScanner?.push(AnimationType.PushRight);
+                this.setState({
+                  imageSide: "front",
+                });
+              }}
+            >
+              Insurance - Front
+            </button>
+            {this.state.frontSideImage && (
+              <img src={this.state.frontSideImage} alt="" style={{width:"200px", height:"200px", objectFit:"contain"}}/>
+            )}
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+          >
+            <button
+              onClick={() => {
+                this._documentScanner?.push(AnimationType.PushRight);
+                this.setState({
+                  imageSide: "back",
+                });
+              }}
+            >
+              Insurance - Back
+            </button>
+
+            {this.state.backSideImage && (
+              <img src={this.state.backSideImage} alt="" style={{width:"200px", height:"200px", objectFit:"contain"}}/>
+            )}
+          </div>
         </div>
       );
     }
@@ -186,7 +227,7 @@ export default class App extends React.Component<any, any> {
         { text: "CROP", action: this.openCroppingUI.bind(this) },
         { text: "FILTER", action: this.applyFilter.bind(this) },
         { text: "DELETE", action: this.deletePage.bind(this) },
-        { text: "DONE", action: this.onBackPress.bind(this), right:true },
+        { text: "DONE", action: this.backToHomePage.bind(this), right: true },
       ];
     }
     if (route === RoutePath.CroppingView) {
@@ -272,14 +313,38 @@ export default class App extends React.Component<any, any> {
 
   deletePage() {
     Pages.instance.removeActiveItem();
-    RoutingService.instance.route(RoutePath.ImageResults);
+    RoutingService.instance.reset();
   }
 
   async onDocumentDetected(result: any) {
     Pages.instance.add(result);
     ScanbotSdkService.instance.sdk?.utils.flash();
-
+    this._documentScanner?.pop();
+    ScanbotSdkService.instance.disposeDocumentScanner();
     console.log("Document detection result:", result);
+    this.postDocumentDetection();
+  }
+
+  async postDocumentDetection() {
+    const index = this.state.imageSide === "front" ? 0 : 1
+    this.setState({
+      activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index),
+    });
+    Pages.instance.setActiveItem(index);
+    RoutingService.instance.route(RoutePath.ImageDetails, { index: index });
+  }
+
+  backToHomePage() {
+    this.onBackPress();
+    if (this.state.imageSide === "front") {
+      this.setState({
+        frontSideImage: this.state.activeImage,
+      });
+    } else {
+      this.setState({
+        backSideImage: this.state.activeImage,
+      });
+    }
   }
 
   async onFeatureClick(feature: any) {
