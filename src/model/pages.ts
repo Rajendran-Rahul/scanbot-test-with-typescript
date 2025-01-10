@@ -5,8 +5,12 @@ export default class Pages {
   private activeIndex: number = -1;
 
   // @ts-ignore
-  public add(page: any) {
-    this.list.push(page);
+  public add(page: any, index?:number = -1) {
+    if(this.imageAtIndex(index)) {
+      this.list[index] = page
+    } else {
+      this.list.push(page);
+    }
   }
 
   public get() {

@@ -121,9 +121,9 @@ export class ScanbotSdkService {
         outline: {
           polygon: {
             fillCapturing: "transparent",
-            strokeCapturing: "transparent",
+            strokeCapturing: "none",
             fillSearching: "transparent",
-            strokeSearching: "transparent",
+            strokeSearching: "none",
           },
         },
       },

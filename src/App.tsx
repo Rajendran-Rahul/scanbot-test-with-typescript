@@ -351,13 +351,13 @@ export default class App extends React.Component<any, any> {
       ScanbotSdkService.instance.disposeDocumentScanner();
       return
     } */
-
-    Pages.instance.add(result);
+    const index = this.state.imageSide === "front" ? 0 : 1;
+    Pages.instance.add(result, index);
     ScanbotSdkService.instance.sdk?.utils.flash();
     this._documentScanner?.pop();
     ScanbotSdkService.instance.disposeDocumentScanner();
     console.log("Document detection result:", result);
-    const index = this.state.imageSide === "front" ? 0 : 1;
+    
     this.postDocumentDetection(index);
   }
 
