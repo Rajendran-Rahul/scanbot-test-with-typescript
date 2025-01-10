@@ -133,25 +133,36 @@ export default class App extends React.Component<any, any> {
     if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner) {
       return (
         <div
-          style={{ width: "100%", display: "flex", justifyContent: "center", gap:'40px' }}
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            gap: "40px",
+          }}
         >
           {/* <ErrorLabel message={this.state.error.message} />
           <FeatureList onItemClick={this.onFeatureClick.bind(this)} /> */}
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "20px", }}
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
             <button
               onClick={() => {
-                this._documentScanner?.push(AnimationType.PushRight);
-                this.setState({
-                  imageSide: "front",
-                });
+                this.handleButtonClick("front");
               }}
             >
               Insurance - Front
             </button>
             {this.state.frontSideImage && (
-              <img src={this.state.frontSideImage} alt="" style={{width:"200px", height:"200px", objectFit:"contain"}}/>
+              <img
+                src={this.state.frontSideImage}
+                alt=""
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  objectFit: "contain",
+                }}
+                onClick={() => this.postDocumentDetection(0)}
+              />
             )}
           </div>
           <div
@@ -159,17 +170,23 @@ export default class App extends React.Component<any, any> {
           >
             <button
               onClick={() => {
-                this._documentScanner?.push(AnimationType.PushRight);
-                this.setState({
-                  imageSide: "back",
-                });
+                this.handleButtonClick("back");
               }}
             >
               Insurance - Back
             </button>
 
             {this.state.backSideImage && (
-              <img src={this.state.backSideImage} alt="" style={{width:"200px", height:"200px", objectFit:"contain"}}/>
+              <img
+                src={this.state.backSideImage}
+                alt=""
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  objectFit: "contain",
+                }}
+                onClick={() => this.postDocumentDetection(1)}
+              />
             )}
           </div>
         </div>
@@ -208,6 +225,13 @@ export default class App extends React.Component<any, any> {
     }
   }
 
+  private handleButtonClick(side: string) {
+    this._documentScanner?.push(AnimationType.PushRight);
+    this.setState({
+      imageSide: side,
+    });
+  }
+
   private decideButtons() {
     const route = NavigationUtils.findRoute();
     if (route === RoutePath.DocumentScanner) {
@@ -226,7 +250,7 @@ export default class App extends React.Component<any, any> {
       return [
         { text: "CROP", action: this.openCroppingUI.bind(this) },
         { text: "FILTER", action: this.applyFilter.bind(this) },
-        { text: "DELETE", action: this.deletePage.bind(this) },
+        // { text: "DELETE", action: this.deletePage.bind(this) },
         { text: "DONE", action: this.backToHomePage.bind(this), right: true },
       ];
     }
@@ -322,16 +346,20 @@ export default class App extends React.Component<any, any> {
     this._documentScanner?.pop();
     ScanbotSdkService.instance.disposeDocumentScanner();
     console.log("Document detection result:", result);
-    this.postDocumentDetection();
+    const index = this.state.imageSide === "front" ? 0 : 1;
+    this.postDocumentDetection(index);
   }
 
-  async postDocumentDetection() {
-    const index = this.state.imageSide === "front" ? 0 : 1
+  async postDocumentDetection(imageIndex: number) {
     this.setState({
-      activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index),
+      activeImage: await ScanbotSdkService.instance.documentImageAsBase64(
+        imageIndex
+      ),
     });
-    Pages.instance.setActiveItem(index);
-    RoutingService.instance.route(RoutePath.ImageDetails, { index: index });
+    Pages.instance.setActiveItem(imageIndex);
+    RoutingService.instance.route(RoutePath.ImageDetails, {
+      index: imageIndex,
+    });
   }
 
   backToHomePage() {
