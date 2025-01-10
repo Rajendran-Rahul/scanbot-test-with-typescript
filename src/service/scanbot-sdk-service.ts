@@ -120,10 +120,10 @@ export class ScanbotSdkService {
         // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
         outline: {
           polygon: {
-            fillCapturing: "rgba(0, 255, 0, 0.2)",
-            strokeCapturing: "green",
-            fillSearching: "rgba(255, 0, 0, 0.2)",
-            strokeSearching: "red",
+            fillCapturing: "transparent",
+            strokeCapturing: "transparent",
+            fillSearching: "transparent",
+            strokeSearching: "transparent",
           },
         },
       },
