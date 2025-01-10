@@ -32,7 +32,22 @@ export class ScanbotSdkService {
 
   public static instance = new ScanbotSdkService();
 
-  license = "";
+  license = "pvMiF98eIibOS4nDhR4epUfMIxOzqg" +
+"CIysvxOJ3cyjjiZF3pIyzAoA6g1FYh" +
+"ro4K+VYBQFX/X0016Yo8iIgxxKaQba" +
+"//3arLJjg8iYMD1/Y7JLVM1n2fNSxW" +
+"MAk4FCvSnDDx4pob+uBEBchn9q+klk" +
+"OrD89DlDZPgacBJ/ql7xra7g+2hChi" +
+"0H0aOFow0Qdiw7W8RnvvUi8QdMOiCE" +
+"HvEy/HpeTK37s7NSwzuIE5ai9XWVPX" +
+"M5tmDyFKPQ9xycEQSDcnYLRmwHZVLz" +
+"mrvLyGXY3IZhn6Ch6EX9bmgHQOxXql" +
+"SSO4p4on7YtWEV4jkV0f9ssMgqGZpu" +
+"g29V3suKHO8g==\nU2NhbmJvdFNESw" +
+"psb2NhbGhvc3R8c2NhbmJvdC10ZXN0" +
+"LXdpdGgtdHlwZXNjcmlwdC52ZXJjZW" +
+"wuYXBwCjE3MzcxNTgzOTkKODM4ODYw" +
+"Nwo4\n";
 
   sdk?: ScanbotSDK;
 
