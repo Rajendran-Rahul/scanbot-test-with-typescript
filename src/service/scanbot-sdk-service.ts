@@ -32,7 +32,8 @@ export class ScanbotSdkService {
 
   public static instance = new ScanbotSdkService();
 
-  license = "pvMiF98eIibOS4nDhR4epUfMIxOzqg" +
+  license = 
+"pvMiF98eIibOS4nDhR4epUfMIxOzqg" +
 "CIysvxOJ3cyjjiZF3pIyzAoA6g1FYh" +
 "ro4K+VYBQFX/X0016Yo8iIgxxKaQba" +
 "//3arLJjg8iYMD1/Y7JLVM1n2fNSxW" +
@@ -233,5 +234,9 @@ export class ScanbotSdkService {
     rotations: number
   ): Promise<Uint8Array> {
     return await this.sdk!.cropAndRotateImageCcw(image, polygon, rotations);
+  }
+
+  public disableAutoCapture(){
+    return this.documentScanner?.disableAutoCapture()
   }
 }

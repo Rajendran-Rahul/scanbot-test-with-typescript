@@ -35,6 +35,8 @@ export default class App extends React.Component<any, any> {
     };
   }
 
+  poorQualityDocument = ['POOR', "VERY POOR", "NO DOCUMENT"]
+
   async componentDidMount() {
     const sdk = await ScanbotSdkService.instance.initialize();
     this.setState({ sdk: sdk });
@@ -341,6 +343,15 @@ export default class App extends React.Component<any, any> {
   }
 
   async onDocumentDetected(result: any) {
+    // uncomment the below lines to check for document quality when autoCapture is disabled.
+    
+    /*const {cropped}= result
+    const documentQuality = await this.documenQuality(cropped)
+    if(documentQuality && documentQuality?.quality in this.poorQualityDocument ){
+      ScanbotSdkService.instance.disposeDocumentScanner();
+      return
+    } */
+
     Pages.instance.add(result);
     ScanbotSdkService.instance.sdk?.utils.flash();
     this._documentScanner?.pop();
@@ -349,6 +360,15 @@ export default class App extends React.Component<any, any> {
     const index = this.state.imageSide === "front" ? 0 : 1;
     this.postDocumentDetection(index);
   }
+
+  // async documenQuality(image:any){
+  //   const analyzer = await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
+  //   const result = await analyzer?.analyze(image);
+  //   console.log("result", result)
+  //   await analyzer?.release();
+  //   return result
+    
+  // }
 
   async postDocumentDetection(imageIndex: number) {
     this.setState({
