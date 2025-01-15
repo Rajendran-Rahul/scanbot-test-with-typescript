@@ -52,7 +52,7 @@ export class ScanbotSdkService {
 
   sdk?: ScanbotSDK;
 
-  documentScanner?: IDocumentScannerHandle | void;
+  documentScanner?: IDocumentScannerHandle;
   croppingView?: ICroppingViewHandle;
 
   public async initialize() {
@@ -81,6 +81,7 @@ export class ScanbotSdkService {
       }, 2000);
     }
   }
+  
   public async isLicenseValid(): Promise<boolean> {
     const info = await this.sdk?.getLicenseInfo();
     if (!info) {
@@ -130,7 +131,7 @@ export class ScanbotSdkService {
       onError: errorCallback,
       preferredCamera: "camera2 0, facing back",
     };
-    this.documentScanner = (await this.sdk!.createDocumentScanner(config)).disableAutoCapture();
+    this.documentScanner = await this.sdk!.createDocumentScanner(config);
   }
 
   public disposeDocumentScanner() {
@@ -237,7 +238,7 @@ export class ScanbotSdkService {
   }
 
   disableAutoCapture(){
-    return this.documentScanner?.disableAutoCapture()
+    return this.documentScanner?.disableAutoCapture();
   }
 
   public isAutoCapturePresent(){
