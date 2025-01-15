@@ -86,8 +86,8 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         {this.props.showBottomActionBar && <ActionBarBottom
           label={labelText}
           onDone={this.onDonePress.bind(this)}
-          onAutoCapture={this.autoCaptureDisabled.bind(this)}
-          autoCapture={"Auto Capture"}
+          // onAutoCapture={this.autoCaptureDisabled.bind(this)}
+          // autoCapture={"Auto Capture"}
         />}
       </Animation>
     );
