@@ -32,10 +32,11 @@ export default class App extends React.Component<any, any> {
       frontSideImage: undefined,
       backSideImage: undefined,
       imageSide: undefined,
+      documentQuality: "",
     };
   }
 
-  poorQualityDocument = ['POOR', "VERY POOR", "NO DOCUMENT"]
+  poorQualityDocument = ["POOR", "VERY POOR", "NO DOCUMENT"];
 
   async componentDidMount() {
     const sdk = await ScanbotSdkService.instance.initialize();
@@ -134,64 +135,67 @@ export default class App extends React.Component<any, any> {
 
     if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner) {
       return (
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            gap: "40px",
-          }}
-        >
-          {/* <ErrorLabel message={this.state.error.message} />
+        <>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              gap: "40px",
+            }}
+          >
+            {/* <ErrorLabel message={this.state.error.message} />
           <FeatureList onItemClick={this.onFeatureClick.bind(this)} /> */}
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-          >
-            <button
-              onClick={() => {
-                this.handleButtonClick("front");
-              }}
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
             >
-              Insurance - Front
-            </button>
-            {this.state.frontSideImage && (
-              <img
-                src={this.state.frontSideImage}
-                alt=""
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  objectFit: "contain",
+              <button
+                onClick={() => {
+                  this.handleButtonClick("front");
                 }}
-                onClick={() => this.postDocumentDetection(0)}
-              />
-            )}
-          </div>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-          >
-            <button
-              onClick={() => {
-                this.handleButtonClick("back");
-              }}
+              >
+                Insurance - Front
+              </button>
+              {this.state.frontSideImage && (
+                <img
+                  src={this.state.frontSideImage}
+                  alt=""
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    objectFit: "contain",
+                  }}
+                  onClick={() => this.postDocumentDetection(0)}
+                />
+              )}
+            </div>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
             >
-              Insurance - Back
-            </button>
+              <button
+                onClick={() => {
+                  this.handleButtonClick("back");
+                }}
+              >
+                Insurance - Back
+              </button>
 
-            {this.state.backSideImage && (
-              <img
-                src={this.state.backSideImage}
-                alt=""
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  objectFit: "contain",
-                }}
-                onClick={() => this.postDocumentDetection(1)}
-              />
-            )}
+              {this.state.backSideImage && (
+                <img
+                  src={this.state.backSideImage}
+                  alt=""
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    objectFit: "contain",
+                  }}
+                  onClick={() => this.postDocumentDetection(1)}
+                />
+              )}
+            </div>
           </div>
-        </div>
+          <h1>{this.state.documentQuality}</h1>
+        </>
       );
     }
     if (route === RoutePath.CroppingView) {
@@ -344,32 +348,35 @@ export default class App extends React.Component<any, any> {
   }
 
   async onDocumentDetected(result: any) {
-    // uncomment the below lines to check for document quality when autoCapture is disabled.
-    
-    /*const {cropped}= result
-    const documentQuality = await this.documenQuality(cropped)
-    if(documentQuality && documentQuality?.quality in this.poorQualityDocument ){
-      ScanbotSdkService.instance.disposeDocumentScanner();
-      return
-    } */
+    console.log('result', result)
+
+    const { cropped } = result;
+    const documentQuality = await this.documenQuality(cropped);
+    this.setState({
+      documentQuality: documentQuality?.quality,
+    });
+
+    if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
+      return;
+    }
+
     const index = this.state.imageSide === "front" ? 0 : 1;
     Pages.instance.add(result, index);
     ScanbotSdkService.instance.sdk?.utils.flash();
     this._documentScanner?.pop();
     ScanbotSdkService.instance.disposeDocumentScanner();
     console.log("Document detection result:", result);
-    
+
     this.postDocumentDetection(index);
   }
 
-  // async documenQuality(image:any){
-  //   const analyzer = await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
-  //   const result = await analyzer?.analyze(image);
-  //   console.log("result", result)
-  //   await analyzer?.release();
-  //   return result
-    
-  // }
+  async documenQuality(image: any) {
+    const analyzer =
+      await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
+    const result = await analyzer?.analyze(image);
+    await analyzer?.release();
+    return result;
+  }
 
   async postDocumentDetection(imageIndex: number) {
     this.setState({
@@ -452,7 +459,7 @@ export default class App extends React.Component<any, any> {
     }
   }
 
-  autoCaptureDisabled(){
+  autoCaptureDisabled() {
     ScanbotSdkService.instance.disableAutoCapture();
   }
 }
