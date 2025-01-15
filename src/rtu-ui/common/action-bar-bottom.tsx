@@ -23,11 +23,15 @@ export default class ActionBarBottom extends React.Component<any, any> {
           ...Constants.barStyle(),
           display: "flex",
           flexDirection: "row",
+          alignItems:"center"
         }}
       >
         <div id={"count-label"} style={this.buttonStyle()}>
           {this.props.label}
         </div>
+        <button id={"auto-capture"} style={this.buttonStyle()} onClick={this.props.onAutoCapture} >
+          {this.props.autoCapture}
+        </button>
         <div style={{ right: 0, position: "absolute" }}>
           <button onClick={this.props.onDone} style={this.buttonStyle()}>
             {"Done"}

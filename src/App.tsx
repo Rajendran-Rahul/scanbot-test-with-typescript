@@ -236,11 +236,11 @@ export default class App extends React.Component<any, any> {
 
   private decideButtons() {
     const route = NavigationUtils.findRoute();
-    if (route === RoutePath.DocumentScanner) {
+    if (route === RoutePath.DocumentScanner || NavigationUtils.isAtRoot()) {
       return [
         { text: Pages.instance.count() + " PAGES", action: undefined },
+        { text: "Auto Capture", action: this.autoCaptureDisabled.bind(this) },
         { text: "DONE", action: this.onBackPress.bind(this), right: true },
-        
       ];
     }
     if (route === RoutePath.ImageResults) {

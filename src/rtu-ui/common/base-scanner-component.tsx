@@ -6,6 +6,7 @@ import ActionBarTop from "./action-bar-top";
 import { Constants } from "../model/constants";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 import { MiscUtils } from "../../utils/misc-utils";
+import { ScanbotSdkService } from "@/service/scanbot-sdk-service";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
   constructor(props: any) {
@@ -85,6 +86,8 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         {this.props.showBottomActionBar && <ActionBarBottom
           label={labelText}
           onDone={this.onDonePress.bind(this)}
+          onAutoCapture={this.autoCaptureDisabled.bind(this)}
+          autoCapture={"Auto Capture"}
         />}
       </Animation>
     );
@@ -165,4 +168,8 @@ export default class BaseScannerComponent extends React.Component<any, any> {
   translate(axis: "X" | "Y", percentage: number) {
     return "translate" + axis + "(" + percentage + "%)";
   }
+
+  autoCaptureDisabled(){
+      ScanbotSdkService.instance.disableAutoCapture();
+    }
 }
