@@ -1,6 +1,6 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
 // import FeatureList from "./subviews/feature-list";
@@ -124,6 +124,7 @@ export default class App extends React.Component<any, any> {
           sdk={this.state.sdk}
           onDocumentDetected={this.onDocumentDetected.bind(this)}
           showBottomActionBar={true}
+          onDocumentScannerError={this.onDocumentScannerError.bind(this)}
         />
       );
     }
@@ -313,14 +314,14 @@ export default class App extends React.Component<any, any> {
 
   async applyFilter() {
     const page = Pages.instance.getActiveItem();
-    // const result = await Swal.fire({
-    //   title: "Select filter",
-    //   input: "select",
-    //   inputOptions: ScanbotSdkService.instance.availableFilters(),
-    //   inputPlaceholder: page.filter ?? "Select a filter to apply",
-    // });
+    const result = await Swal.fire({
+      title: "Select filter",
+      input: "select",
+      inputOptions: ScanbotSdkService.instance.availableFilters(),
+      inputPlaceholder: page.filter ?? "Select a filter to apply",
+    });
 
-    const filter = ScanbotSdkService.instance.filterNameByIndex("4");
+    const filter = ScanbotSdkService.instance.filterNameByIndex(result?.value);
 
     // "None" is not an actual filter, only used in this example app
     if (filter === "none") {
@@ -348,17 +349,11 @@ export default class App extends React.Component<any, any> {
   }
 
   async onDocumentDetected(result: any) {
-    this.applyFilter()
-
-    // const { cropped } = result;
-    // const documentQuality = await this.documenQuality(cropped);
-    // this.setState({
-    //   documentQuality: documentQuality?.quality,
-    // });
-
-    // if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
-    //   return;
-    // }
+    const { cropped } = result;
+    const documentQuality = await this.documenQuality(cropped);
+    if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
+      this.onDocumentScannerError("Image quality is not good. Please try again.")
+    }
     const index = this.state.imageSide === "front" ? 0 : 1;
     Pages.instance.add(result, index);
     ScanbotSdkService.instance.sdk?.utils.flash();
@@ -458,5 +453,10 @@ export default class App extends React.Component<any, any> {
 
   autoCaptureDisabled() {
     ScanbotSdkService.instance.disableAutoCapture();
+  }
+
+  onDocumentScannerError(error:any){
+    console.log("error", error);
+    this._documentScanner?.pop()
   }
 }
