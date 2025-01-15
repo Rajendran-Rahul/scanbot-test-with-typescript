@@ -53,6 +53,7 @@ export default class App extends React.Component<any, any> {
         this._documentScanner?.pop();
       }
     });
+    ScanbotSdkService.instance.disableAutoCapture()
   }
 
   onBackPress() {
@@ -351,6 +352,7 @@ export default class App extends React.Component<any, any> {
       ScanbotSdkService.instance.disposeDocumentScanner();
       return
     } */
+   console.log(ScanbotSdkService.instance.isAutoCapturePresent())
     const index = this.state.imageSide === "front" ? 0 : 1;
     Pages.instance.add(result, index);
     ScanbotSdkService.instance.sdk?.utils.flash();

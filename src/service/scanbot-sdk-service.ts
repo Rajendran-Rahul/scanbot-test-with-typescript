@@ -52,7 +52,7 @@ export class ScanbotSdkService {
 
   sdk?: ScanbotSDK;
 
-  documentScanner?: IDocumentScannerHandle;
+  documentScanner?: IDocumentScannerHandle | void;
   croppingView?: ICroppingViewHandle;
 
   public async initialize() {
@@ -130,7 +130,7 @@ export class ScanbotSdkService {
       onError: errorCallback,
       preferredCamera: "camera2 0, facing back",
     };
-    this.documentScanner = await this.sdk!.createDocumentScanner(config);
+    this.documentScanner = (await this.sdk!.createDocumentScanner(config)).disableAutoCapture();
   }
 
   public disposeDocumentScanner() {
@@ -236,7 +236,11 @@ export class ScanbotSdkService {
     return await this.sdk!.cropAndRotateImageCcw(image, polygon, rotations);
   }
 
-  public disableAutoCapture(){
+  disableAutoCapture(){
     return this.documentScanner?.disableAutoCapture()
+  }
+
+  public isAutoCapturePresent(){
+    return this.documentScanner?.isAutoCaptureEnabled()
   }
 }
