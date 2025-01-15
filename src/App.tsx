@@ -256,7 +256,7 @@ export default class App extends React.Component<any, any> {
     if (route === RoutePath.ImageDetails) {
       return [
         { text: "CROP", action: this.openCroppingUI.bind(this) },
-        { text: "FILTER", action: this.applyFilter.bind(this) },
+        // { text: "FILTER", action: this.applyFilter.bind(this) },
         // { text: "DELETE", action: this.deletePage.bind(this) },
         { text: "DONE", action: this.backToHomePage.bind(this), right: true },
       ];
@@ -313,7 +313,6 @@ export default class App extends React.Component<any, any> {
 
   async applyFilter() {
     const page = Pages.instance.getActiveItem();
-    console.log("page", page)
     // const result = await Swal.fire({
     //   title: "Select filter",
     //   input: "select",
