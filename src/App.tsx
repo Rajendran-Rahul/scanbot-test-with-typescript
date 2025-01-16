@@ -355,11 +355,11 @@ export default class App extends React.Component<any, any> {
   }
 
   async onDocumentDetected(result: any) {
-    // const { cropped } = result;
-    // const documentQuality = await this.documenQuality(cropped);
-    // if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
-    //   this.onDocumentScannerError("Image quality is not good. Please try again.")
-    // }
+    const { cropped } = result;
+    const documentQuality = await this.documenQuality(cropped);
+    if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
+      this.onDocumentScannerError("Image quality is not good. Please try again.")
+    }
     Pages.instance.add(result, this.state.activeImageIndex);
     ScanbotSdkService.instance.sdk?.utils.flash();
     this._documentScanner?.pop();
@@ -367,13 +367,13 @@ export default class App extends React.Component<any, any> {
     this.postDocumentDetection(this.state.activeImageIndex);
   }
 
-  // async documenQuality(image: any) {
-  //   const analyzer =
-  //     await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
-  //   const result = await analyzer?.analyze(image);
-  //   await analyzer?.release();
-  //   return result;
-  // }
+  async documenQuality(image: any) {
+    const analyzer =
+      await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
+    const result = await analyzer?.analyze(image);
+    await analyzer?.release();
+    return result;
+  }
 
   async postDocumentDetection(imageIndex: number) {
     this.setState({
