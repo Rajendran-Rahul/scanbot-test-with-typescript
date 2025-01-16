@@ -130,7 +130,6 @@ export class ScanbotSdkService {
       },
       onError: errorCallback,
       preferredCamera: "camera2 0, facing back",
-      autoCaptureEnabled: false,
     };
     this.documentScanner = await this.sdk!.createDocumentScanner(config);
   }
