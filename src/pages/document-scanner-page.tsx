@@ -3,6 +3,7 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 
 export default class DocumentScannerPage extends React.Component<any, any> {
   async componentDidMount(): Promise<void> {
+    ScanbotSdkService.instance.disableAutoCapture()
     await ScanbotSdkService.instance.createDocumentScanner(
       this.props.onDocumentDetected,
       this.props.onDocumentDetectionError

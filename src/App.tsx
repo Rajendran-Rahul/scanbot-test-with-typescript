@@ -11,11 +11,12 @@ import CroppingPage from "./pages/cropping-page";
 import Pages from "./model/pages";
 import { ScanbotSdkService } from "./service/scanbot-sdk-service";
 import { RoutePath, RoutingService } from "./service/routing-service";
-import { ImageUtils } from "./utils/image-utils";
+// import { ImageUtils } from "./utils/image-utils";
 import { NavigationUtils } from "./utils/navigation-utils";
-import { MiscUtils } from "./utils/misc-utils";
+// import { MiscUtils } from "./utils/misc-utils";
 import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
 import { AnimationType } from "./rtu-ui/enum/animation-type";
+import ErrorLabel from "./subviews/error-label";
 // import ErrorLabel from "./subviews/error-label";
 
 export default class App extends React.Component<any, any> {
@@ -32,7 +33,7 @@ export default class App extends React.Component<any, any> {
       frontSideImage: undefined,
       backSideImage: undefined,
       documentQuality: "",
-      activeImageIndex: undefined
+      activeImageIndex: undefined,
     };
   }
 
@@ -145,8 +146,8 @@ export default class App extends React.Component<any, any> {
               gap: "40px",
             }}
           >
-            {/* <ErrorLabel message={this.state.error.message} />
-          <FeatureList onItemClick={this.onFeatureClick.bind(this)} /> */}
+            <ErrorLabel message={this.state.error.message} />
+            {/* <FeatureList onItemClick={this.onFeatureClick.bind(this)} /> */}
             <div
               style={{ display: "flex", flexDirection: "column", gap: "20px" }}
             >
@@ -231,7 +232,7 @@ export default class App extends React.Component<any, any> {
     }
   }
 
-  private handleButtonClick(imageIndex: number) {
+  private async handleButtonClick(imageIndex: number) {
     this._documentScanner?.push(AnimationType.PushRight);
     this.setState({
       activeImageIndex: imageIndex,
@@ -247,12 +248,12 @@ export default class App extends React.Component<any, any> {
         { text: "DONE", action: this.onBackPress.bind(this), right: true },
       ];
     }
-    if (route === RoutePath.ImageResults) {
-      return [
-        { text: "SAVE PDF", action: this.savePDF.bind(this) },
-        { text: "SAVE TIFF", action: this.saveTIFF.bind(this) },
-      ];
-    }
+    // if (route === RoutePath.ImageResults) {
+    //   return [
+    //     { text: "SAVE PDF", action: this.savePDF.bind(this) },
+    //     { text: "SAVE TIFF", action: this.saveTIFF.bind(this) },
+    //   ];
+    // }
     if (route === RoutePath.ImageDetails) {
       return [
         { text: "CROP", action: this.openCroppingUI.bind(this) },
@@ -291,19 +292,19 @@ export default class App extends React.Component<any, any> {
     });
   }
 
-  async savePDF() {
-    const bytes = await ScanbotSdkService.instance.generatePDF(
-      Pages.instance.get()
-    );
-    ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
-  }
+  // async savePDF() {
+  //   const bytes = await ScanbotSdkService.instance.generatePDF(
+  //     Pages.instance.get()
+  //   );
+  //   ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
+  // }
 
-  async saveTIFF() {
-    const bytes = await ScanbotSdkService.instance.generateTIFF(
-      Pages.instance.get()
-    );
-    ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
-  }
+  // async saveTIFF() {
+  //   const bytes = await ScanbotSdkService.instance.generateTIFF(
+  //     Pages.instance.get()
+  //   );
+  //   ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
+  // }
 
   openCroppingUI() {
     RoutingService.instance.route(RoutePath.CroppingView, {
@@ -350,8 +351,13 @@ export default class App extends React.Component<any, any> {
   async onDocumentDetected(result: any) {
     const { cropped } = result;
     const documentQuality = await this.documenQuality(cropped);
-    if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
-      this.onDocumentScannerError("Image quality is not good. Please try again.")
+    if (
+      documentQuality &&
+      documentQuality?.quality in this.poorQualityDocument
+    ) {
+      this.onDocumentScannerError(
+        "Image quality is not good. Please try again."
+      );
     }
     Pages.instance.add(result, this.state.activeImageIndex);
     ScanbotSdkService.instance.sdk?.utils.flash();
@@ -373,7 +379,7 @@ export default class App extends React.Component<any, any> {
       activeImage: await ScanbotSdkService.instance.documentImageAsBase64(
         imageIndex
       ),
-      activeImageIndex: imageIndex
+      activeImageIndex: imageIndex,
     });
     Pages.instance.setActiveItem(imageIndex);
     RoutingService.instance.route(RoutePath.ImageDetails, {
@@ -394,61 +400,61 @@ export default class App extends React.Component<any, any> {
     });
   }
 
-  async onFeatureClick(feature: any) {
-    const valid = await ScanbotSdkService.instance.isLicenseValid();
-    if (!valid) {
-      console.error(
-        "License invalid or expired. ScanbotSDK features not available"
-      );
-      return;
-    }
+  // async onFeatureClick(feature: any) {
+  //   const valid = await ScanbotSdkService.instance.isLicenseValid();
+  //   if (!valid) {
+  //     console.error(
+  //       "License invalid or expired. ScanbotSDK features not available"
+  //     );
+  //     return;
+  //   }
 
-    if (feature.id === RoutePath.DocumentScanner) {
-      this._documentScanner?.push(AnimationType.PushRight);
-      return;
-    }
+  //   if (feature.id === RoutePath.DocumentScanner) {
+  //     this._documentScanner?.push(AnimationType.PushRight);
+  //     return;
+  //   }
 
-    if (feature.route) {
-      RoutingService.instance.route(feature.route);
-      return;
-    }
+  //   if (feature.route) {
+  //     RoutingService.instance.route(feature.route);
+  //     return;
+  //   }
 
-    if (feature.id === RoutePath.LicenseInfo) {
-      const info = await this.state.sdk?.getLicenseInfo();
-      const color = info?.status === "Trial" ? "success" : "error";
-      this.setState({ alert: { color: color, text: JSON.stringify(info) } });
-    } else if (feature.id === RoutePath.DocumentOnJpeg) {
-      const image = await ImageUtils.pick(
-        ImageUtils.MIME_TYPE_JPEG,
-        document.getElementById(feature.id) as any
-      );
+  //   if (feature.id === RoutePath.LicenseInfo) {
+  //     const info = await this.state.sdk?.getLicenseInfo();
+  //     const color = info?.status === "Trial" ? "success" : "error";
+  //     this.setState({ alert: { color: color, text: JSON.stringify(info) } });
+  //   } else if (feature.id === RoutePath.DocumentOnJpeg) {
+  //     const image = await ImageUtils.pick(
+  //       ImageUtils.MIME_TYPE_JPEG,
+  //       document.getElementById(feature.id) as any
+  //     );
 
-      const contourDetectionResult =
-        await ScanbotSdkService.instance.detectDocument(image.original);
-      if (
-        contourDetectionResult.success === true &&
-        contourDetectionResult.polygon
-      ) {
-        const cropped = await ScanbotSdkService.instance.cropAndRotateImageCcw(
-          image.original,
-          contourDetectionResult.polygon,
-          0
-        );
-        const documentDetectionResult = {
-          ...contourDetectionResult,
-          original: image.original,
-          cropped: cropped,
-        };
+  //     const contourDetectionResult =
+  //       await ScanbotSdkService.instance.detectDocument(image.original);
+  //     if (
+  //       contourDetectionResult.success === true &&
+  //       contourDetectionResult.polygon
+  //     ) {
+  //       const cropped = await ScanbotSdkService.instance.cropAndRotateImageCcw(
+  //         image.original,
+  //         contourDetectionResult.polygon,
+  //         0
+  //       );
+  //       const documentDetectionResult = {
+  //         ...contourDetectionResult,
+  //         original: image.original,
+  //         cropped: cropped,
+  //       };
 
-        Pages.instance.add(documentDetectionResult);
-        await MiscUtils.alert("Detection successful");
-      } else {
-        await MiscUtils.alert("Detection failed");
-      }
-    } else {
-      console.log("no service");
-    }
-  }
+  //       Pages.instance.add(documentDetectionResult);
+  //       await MiscUtils.alert("Detection successful");
+  //     } else {
+  //       await MiscUtils.alert("Detection failed");
+  //     }
+  //   } else {
+  //     console.log("no service");
+  //   }
+  // }
 
   autoCaptureDisabled() {
     ScanbotSdkService.instance.disableAutoCapture();

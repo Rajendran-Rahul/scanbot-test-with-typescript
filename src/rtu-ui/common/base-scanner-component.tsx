@@ -63,6 +63,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
     const Animation = this.animation(this.state.animation.type);
     const destination = this.to(this.state.animation.type);
     this.previousDestination = destination;
+    ScanbotSdkService.instance.disableAutoCapture()
 
     return (
       <Animation

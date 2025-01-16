@@ -43,7 +43,8 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     this.pushType = type;
     ScanbotSdkService.instance.disableAutoCapture();
     this.updateAnimationType(type, async () => {
-      try {        
+      try {
+        ScanbotSdkService.instance.disableAutoCapture()
         await ScanbotSdkService.instance.createDocumentScanner(
           this.onDocumentDetected.bind(this),
           this.onDocumentScannerError.bind(this),

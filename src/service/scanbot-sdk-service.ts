@@ -32,23 +32,23 @@ export class ScanbotSdkService {
 
   public static instance = new ScanbotSdkService();
 
-  license = 
-"pvMiF98eIibOS4nDhR4epUfMIxOzqg" +
-"CIysvxOJ3cyjjiZF3pIyzAoA6g1FYh" +
-"ro4K+VYBQFX/X0016Yo8iIgxxKaQba" +
-"//3arLJjg8iYMD1/Y7JLVM1n2fNSxW" +
-"MAk4FCvSnDDx4pob+uBEBchn9q+klk" +
-"OrD89DlDZPgacBJ/ql7xra7g+2hChi" +
-"0H0aOFow0Qdiw7W8RnvvUi8QdMOiCE" +
-"HvEy/HpeTK37s7NSwzuIE5ai9XWVPX" +
-"M5tmDyFKPQ9xycEQSDcnYLRmwHZVLz" +
-"mrvLyGXY3IZhn6Ch6EX9bmgHQOxXql" +
-"SSO4p4on7YtWEV4jkV0f9ssMgqGZpu" +
-"g29V3suKHO8g==\nU2NhbmJvdFNESw" +
-"psb2NhbGhvc3R8c2NhbmJvdC10ZXN0" +
-"LXdpdGgtdHlwZXNjcmlwdC52ZXJjZW" +
-"wuYXBwCjE3MzcxNTgzOTkKODM4ODYw" +
-"Nwo4\n";
+  license =
+    "pvMiF98eIibOS4nDhR4epUfMIxOzqg" +
+    "CIysvxOJ3cyjjiZF3pIyzAoA6g1FYh" +
+    "ro4K+VYBQFX/X0016Yo8iIgxxKaQba" +
+    "//3arLJjg8iYMD1/Y7JLVM1n2fNSxW" +
+    "MAk4FCvSnDDx4pob+uBEBchn9q+klk" +
+    "OrD89DlDZPgacBJ/ql7xra7g+2hChi" +
+    "0H0aOFow0Qdiw7W8RnvvUi8QdMOiCE" +
+    "HvEy/HpeTK37s7NSwzuIE5ai9XWVPX" +
+    "M5tmDyFKPQ9xycEQSDcnYLRmwHZVLz" +
+    "mrvLyGXY3IZhn6Ch6EX9bmgHQOxXql" +
+    "SSO4p4on7YtWEV4jkV0f9ssMgqGZpu" +
+    "g29V3suKHO8g==\nU2NhbmJvdFNESw" +
+    "psb2NhbGhvc3R8c2NhbmJvdC10ZXN0" +
+    "LXdpdGgtdHlwZXNjcmlwdC52ZXJjZW" +
+    "wuYXBwCjE3MzcxNTgzOTkKODM4ODYw" +
+    "Nwo4\n";
 
   sdk?: ScanbotSDK;
 
@@ -73,15 +73,15 @@ export class ScanbotSdkService {
     const info = await this.sdk?.getLicenseInfo();
     if (info && info.status !== "Trial" && info.status !== "Okay") {
       callback(info.description);
-    } else if(info && info.status === "Trial"){
-      callback(info.description)
+    } else if (info && info.status === "Trial") {
+      callback(info.description);
     } else {
       setTimeout(() => {
         this.setLicenceTimeout(callback);
       }, 2000);
     }
   }
-  
+
   public async isLicenseValid(): Promise<boolean> {
     const info = await this.sdk?.getLicenseInfo();
     if (!info) {
@@ -130,6 +130,7 @@ export class ScanbotSdkService {
       },
       onError: errorCallback,
       preferredCamera: "camera2 0, facing back",
+      autoCaptureEnabled: false,
     };
     this.documentScanner = await this.sdk!.createDocumentScanner(config);
   }
@@ -237,11 +238,11 @@ export class ScanbotSdkService {
     return await this.sdk!.cropAndRotateImageCcw(image, polygon, rotations);
   }
 
-  disableAutoCapture(){
+  disableAutoCapture() {
     return this.documentScanner?.disableAutoCapture();
   }
 
-  public isAutoCapturePresent(){
-    return this.documentScanner?.isAutoCaptureEnabled()
+  public isAutoCapturePresent() {
+    return this.documentScanner?.isAutoCaptureEnabled();
   }
 }
