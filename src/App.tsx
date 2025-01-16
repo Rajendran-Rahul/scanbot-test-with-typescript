@@ -31,8 +31,8 @@ export default class App extends React.Component<any, any> {
       image: undefined,
       frontSideImage: undefined,
       backSideImage: undefined,
-      imageSide: undefined,
       documentQuality: "",
+      activeImageIndex: undefined
     };
   }
 
@@ -152,7 +152,7 @@ export default class App extends React.Component<any, any> {
             >
               <button
                 onClick={() => {
-                  this.handleButtonClick("front");
+                  this.handleButtonClick(0);
                 }}
               >
                 Insurance - Front
@@ -175,7 +175,7 @@ export default class App extends React.Component<any, any> {
             >
               <button
                 onClick={() => {
-                  this.handleButtonClick("back");
+                  this.handleButtonClick(1);
                 }}
               >
                 Insurance - Back
@@ -195,7 +195,6 @@ export default class App extends React.Component<any, any> {
               )}
             </div>
           </div>
-          <h1>{this.state.documentQuality}</h1>
         </>
       );
     }
@@ -232,10 +231,10 @@ export default class App extends React.Component<any, any> {
     }
   }
 
-  private handleButtonClick(side: string) {
+  private handleButtonClick(imageIndex: number) {
     this._documentScanner?.push(AnimationType.PushRight);
     this.setState({
-      imageSide: side,
+      activeImageIndex: imageIndex,
     });
   }
 
@@ -290,6 +289,13 @@ export default class App extends React.Component<any, any> {
         index
       ),
     });
+    if (index === 0) {
+      this.setState({
+        frontSideImage: await ScanbotSdkService.instance.documentImageAsBase64(
+          index
+        ),
+      });
+    }
   }
 
   async savePDF() {
@@ -354,12 +360,11 @@ export default class App extends React.Component<any, any> {
     if(documentQuality && documentQuality?.quality in this.poorQualityDocument){
       this.onDocumentScannerError("Image quality is not good. Please try again.")
     }
-    const index = this.state.imageSide === "front" ? 0 : 1;
-    Pages.instance.add(result, index);
+    Pages.instance.add(result, this.state.activeImageIndex);
     ScanbotSdkService.instance.sdk?.utils.flash();
     this._documentScanner?.pop();
     ScanbotSdkService.instance.disposeDocumentScanner();
-    this.postDocumentDetection(index);
+    this.postDocumentDetection(this.state.activeImageIndex);
   }
 
   async documenQuality(image: any) {
@@ -375,6 +380,7 @@ export default class App extends React.Component<any, any> {
       activeImage: await ScanbotSdkService.instance.documentImageAsBase64(
         imageIndex
       ),
+      activeImageIndex: imageIndex
     });
     Pages.instance.setActiveItem(imageIndex);
     RoutingService.instance.route(RoutePath.ImageDetails, {
@@ -384,15 +390,15 @@ export default class App extends React.Component<any, any> {
 
   backToHomePage() {
     this.onBackPress();
-    if (this.state.imageSide === "front") {
+    if (this.state.activeImageIndex === 0) {
       this.setState({
         frontSideImage: this.state.activeImage,
       });
-    } else {
-      this.setState({
-        backSideImage: this.state.activeImage,
-      });
+      return;
     }
+    this.setState({
+      backSideImage: this.state.activeImage,
+    });
   }
 
   async onFeatureClick(feature: any) {
@@ -455,8 +461,8 @@ export default class App extends React.Component<any, any> {
     ScanbotSdkService.instance.disableAutoCapture();
   }
 
-  onDocumentScannerError(error:any){
+  onDocumentScannerError(error: any) {
     console.log("error", error);
-    this._documentScanner?.pop()
+    this._documentScanner?.pop();
   }
 }

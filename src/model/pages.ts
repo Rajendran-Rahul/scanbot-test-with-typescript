@@ -8,9 +8,9 @@ export default class Pages {
   public add(page: any, index?:number = -1) {
     if(this.imageAtIndex(index)) {
       this.list[index] = page
-    } else {
-      this.list.push(page);
+      return
     }
+    this.list.push(page)
   }
 
   public get() {
