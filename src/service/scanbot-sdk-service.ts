@@ -33,22 +33,21 @@ export class ScanbotSdkService {
   public static instance = new ScanbotSdkService();
 
   license =
-    "pvMiF98eIibOS4nDhR4epUfMIxOzqg" +
-    "CIysvxOJ3cyjjiZF3pIyzAoA6g1FYh" +
-    "ro4K+VYBQFX/X0016Yo8iIgxxKaQba" +
-    "//3arLJjg8iYMD1/Y7JLVM1n2fNSxW" +
-    "MAk4FCvSnDDx4pob+uBEBchn9q+klk" +
-    "OrD89DlDZPgacBJ/ql7xra7g+2hChi" +
-    "0H0aOFow0Qdiw7W8RnvvUi8QdMOiCE" +
-    "HvEy/HpeTK37s7NSwzuIE5ai9XWVPX" +
-    "M5tmDyFKPQ9xycEQSDcnYLRmwHZVLz" +
-    "mrvLyGXY3IZhn6Ch6EX9bmgHQOxXql" +
-    "SSO4p4on7YtWEV4jkV0f9ssMgqGZpu" +
-    "g29V3suKHO8g==\nU2NhbmJvdFNESw" +
-    "psb2NhbGhvc3R8c2NhbmJvdC10ZXN0" +
-    "LXdpdGgtdHlwZXNjcmlwdC52ZXJjZW" +
-    "wuYXBwCjE3MzcxNTgzOTkKODM4ODYw" +
-    "Nwo4\n";
+    "X9IKrmZCTXLg2/MnkDVJghesmkixZy" +
+    "kpKPaU069+Stmk7i6LyaNOvO0OwE5e" +
+    "ZLcNfDHjj62GUnJBSsSfhORr+zw6mW" +
+    "nRoBMhsbYSwJkCeqJ7j+K+6CH3UQeh" +
+    "JgrwumJSv3FyXOpfmHVggXySOGpebf" +
+    "51iMjcnI2g8JVwo8yQoaRKtI1dX5DE" +
+    "EhpwjVjehYURtEkB3n4zWLu2CFYgRr" +
+    "DUDCCfGqWFOuevWeW9KegNRhC386bF" +
+    "FtPD0ASz7l52VCL6wgJv1yjUBw/Ter" +
+    "fO3xVGqfxGM1SSUFRDRf+tWgEIzfGq" +
+    "0NWvQgrHHX4JTDMfW8vavz8Nu2XmBf" +
+    "RjHNac1TJLeg==\nU2NhbmJvdFNESw" +
+    "psb2NhbGhvc3R8c2NhbmJvdC11aS10" +
+    "eXBlc2NyaXB0LnZlcmNlbC5hcHAKMT" +
+    "czOTQ5MTE5OQo4Mzg4NjA3Cjg=\n";
 
   sdk?: ScanbotSDK;
 
@@ -130,6 +129,7 @@ export class ScanbotSdkService {
       },
       onError: errorCallback,
       preferredCamera: "camera2 0, facing back",
+      // autoCaptureEnabled: false, // Uncomment to enable disable autoCapture
     };
     this.documentScanner = await this.sdk!.createDocumentScanner(config);
   }
