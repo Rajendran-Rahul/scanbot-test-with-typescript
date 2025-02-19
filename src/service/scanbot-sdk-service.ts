@@ -32,22 +32,22 @@ export class ScanbotSdkService {
 
   public static instance = new ScanbotSdkService();
 
-  license =
-    "X9IKrmZCTXLg2/MnkDVJghesmkixZy" +
-    "kpKPaU069+Stmk7i6LyaNOvO0OwE5e" +
-    "ZLcNfDHjj62GUnJBSsSfhORr+zw6mW" +
-    "nRoBMhsbYSwJkCeqJ7j+K+6CH3UQeh" +
-    "JgrwumJSv3FyXOpfmHVggXySOGpebf" +
-    "51iMjcnI2g8JVwo8yQoaRKtI1dX5DE" +
-    "EhpwjVjehYURtEkB3n4zWLu2CFYgRr" +
-    "DUDCCfGqWFOuevWeW9KegNRhC386bF" +
-    "FtPD0ASz7l52VCL6wgJv1yjUBw/Ter" +
-    "fO3xVGqfxGM1SSUFRDRf+tWgEIzfGq" +
-    "0NWvQgrHHX4JTDMfW8vavz8Nu2XmBf" +
-    "RjHNac1TJLeg==\nU2NhbmJvdFNESw" +
-    "psb2NhbGhvc3R8c2NhbmJvdC11aS10" +
-    "eXBlc2NyaXB0LnZlcmNlbC5hcHAKMT" +
-    "czOTQ5MTE5OQo4Mzg4NjA3Cjg=\n";
+  // license =
+  //   "X9IKrmZCTXLg2/MnkDVJghesmkixZy" +
+  //   "kpKPaU069+Stmk7i6LyaNOvO0OwE5e" +
+  //   "ZLcNfDHjj62GUnJBSsSfhORr+zw6mW" +
+  //   "nRoBMhsbYSwJkCeqJ7j+K+6CH3UQeh" +
+  //   "JgrwumJSv3FyXOpfmHVggXySOGpebf" +
+  //   "51iMjcnI2g8JVwo8yQoaRKtI1dX5DE" +
+  //   "EhpwjVjehYURtEkB3n4zWLu2CFYgRr" +
+  //   "DUDCCfGqWFOuevWeW9KegNRhC386bF" +
+  //   "FtPD0ASz7l52VCL6wgJv1yjUBw/Ter" +
+  //   "fO3xVGqfxGM1SSUFRDRf+tWgEIzfGq" +
+  //   "0NWvQgrHHX4JTDMfW8vavz8Nu2XmBf" +
+  //   "RjHNac1TJLeg==\nU2NhbmJvdFNESw" +
+  //   "psb2NhbGhvc3R8c2NhbmJvdC11aS10" +
+  //   "eXBlc2NyaXB0LnZlcmNlbC5hcHAKMT" +
+  //   "czOTQ5MTE5OQo4Mzg4NjA3Cjg=\n";
 
   sdk?: ScanbotSDK;
 
