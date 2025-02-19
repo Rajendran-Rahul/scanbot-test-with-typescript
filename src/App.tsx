@@ -381,6 +381,11 @@ export default class App extends React.Component<any, any> {
       ),
       activeImageIndex: imageIndex,
     });
+    if(imageIndex === 0){
+      window.parent.postMessage({type:"frontImage", src: this.state.activeImage})
+    } else {
+      window.parent.postMessage({type:"backImages", src: this.state.activeImage})
+    }
     Pages.instance.setActiveItem(imageIndex);
     RoutingService.instance.route(RoutePath.ImageDetails, {
       index: imageIndex,
