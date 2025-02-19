@@ -56,7 +56,7 @@ export class ScanbotSdkService {
 
   public async initialize() {
     this.sdk = await ScanbotSDK.initialize({
-      licenseKey: this.license,
+      licenseKey: "",
       // WASM files are copied to this directory by the npm postinstall script
       engine: "wasm",
     });
